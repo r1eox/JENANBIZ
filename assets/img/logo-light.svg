@@ -1,0 +1,11 @@
+<svg width="120" height="50" viewBox="0 0 120 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="10" y="38" font-family="'Georgia', 'Times New Roman', serif" font-size="32" font-weight="bold" fill="url(#goldGradientLight)" letter-spacing="2">JENAN</text>
+  <path d="M95 8 L98 16 L106 19 L98 22 L95 30 L92 22 L84 19 L92 16 Z" fill="url(#goldGradientLight)"/>
+  <defs>
+    <linearGradient id="goldGradientLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c4a747;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a88a2e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

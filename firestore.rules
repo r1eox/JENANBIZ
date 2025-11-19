@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // قواعد التقييمات
+    match /reviews/{reviewId} {
+      // السماح بالقراءة للجميع
+      allow read: if true;
+      
+      // السماح بالكتابة للجميع (للتقييمات الجديدة)
+      allow create: if request.resource.data.keys().hasAll(['name', 'service', 'rating', 'text', 'createdAt'])
+                    && request.resource.data.rating is number
+                    && request.resource.data.rating >= 1 
+                    && request.resource.data.rating <= 5
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() >= 10
+                    && request.resource.data.text.size() <= 1000;
+      
+      // السماح بالتحديث والحذف للجميع (مؤقتاً - للتطوير)
+      // بعدين راح نضيف Authentication ونحدد صلاحيات الأدمن فقط
+      allow update, delete: if true;
+    }
+    
+    // قواعد الطلبات (inquiries)
+    match /inquiries/{inquiryId} {
+      // السماح بالقراءة للجميع (لوحة التحكم)
+      allow read: if true;
+      
+      // السماح بإنشاء طلبات جديدة (بدون شروط مؤقتاً للاختبار)
+      allow create: if true;
+      
+      // السماح بالتحديث والحذف للجميع (مؤقتاً)
+      allow update, delete: if true;
+    }
+  }
+}

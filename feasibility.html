@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>دراسات الجدوى الاقتصادية — جنان بيزنس</title>
+  <meta name="description" content="احصل على دراسة جدوى اقتصادية مبسطة أو مفصلة لمشروعك من جنان بيزنس — تحليل شامل للجدوى المالية والتسويقية والفنية." />
+  <link rel="icon" href="./assets/img/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css" />
+  <style>
+    /* إخفاء radio buttons وتلوين الـ label عند التحديد */
+    .radio-btn input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .radio-btn:has(input[type="radio"]:checked) {
+      background-color: var(--primary, #d4af37);
+      color: var(--bg, #0a0a0a);
+      border-color: var(--primary, #d4af37);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="top" style="position:relative;">
+    <div class="container nav">
+      <a href="./index.html#top" class="brand" aria-label="جنان بيزنس">
+        <img src="./assets/img/logo-light.png" alt="Jenan Biz" class="logo-img" />
+      </a>
+      <!-- زر رجوع للصفحة الرئيسية -->
+      <a href="./index.html" class="btn btn-outline btn-icon" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; padding:8px;" aria-label="العودة للصفحة الرئيسية" title="العودة للصفحة الرئيسية">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="primaryNav" aria-label="قائمة">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primaryNav" class="nav-links" aria-label="القائمة الرئيسية">
+        <a href="./index.html">الرئيسية</a>
+        <a href="./index.html#about">من نحن</a>
+        <div class="dropdown">
+          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+            خدماتنا
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+              <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="./finance.html">استشارات إدارية</a>
+            <a href="./feasibility.html">دراسات الجدوى</a>
+            <a href="./marketing.html">مجالات تسويقية</a>
+            <a href="./business-services.html">خدمات متكاملة للمستثمرين</a>
+            <a href="./creative-services.html">خدمات إبداعية</a>
+            <a href="./tech-services.html">خدمات تقنية</a>
+          </div>
+        </div>
+        <a href="./index.html#contact" class="btn btn-primary">اطلب استشارة</a>
+        <button id="themeToggle" class="theme-toggle" title="الوضع الليلي" aria-label="تغيير المظهر">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h1>دراسات الجدوى الاقتصادية</h1>
+          <p>نوفّر دراسات جدوى شاملة (مبسطة أو مفصلة) تغطي الجوانب المالية والتسويقية والفنية لمشروعك، لتتخذ قرارك الاستثماري بثقة.</p>
+          <div class="hero-actions">
+            <a href="#requestForm" class="btn btn-primary">اطلب دراسة جدوى الآن</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80&auto=format" alt="دراسات الجدوى" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section id="types" class="section alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>أنواع دراسات الجدوى</h2>
+          <p>اختر النوع الأنسب لمشروعك بناءً على حجم المشروع ومتطلباته.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card">
+            <h3>📋 دراسة جدوى مبسطة</h3>
+            <p>تحليل أولي سريع يغطي المؤشرات الأساسية للمشروع: الجدوى المالية الأولية، تقدير التكلفة والإيرادات، ونظرة عامة على السوق.</p>
+            <ul class="faq" style="margin-top:12px;">
+              <li>مناسبة للمشاريع الصغيرة والمتوسطة</li>
+              <li>مدة التسليم: 5-10 أيام عمل</li>
+              <li>تشمل: تحليل مالي مبدئي، نظرة سوقية عامة</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h3>📊 دراسة جدوى مفصلة</h3>
+            <p>دراسة شاملة ومعمّقة تغطي جميع جوانب المشروع بتفصيل: دراسة سوقية متكاملة، تحليل مالي دقيق، جدوى فنية وتشغيلية، وخطة تنفيذية.</p>
+            <ul class="faq" style="margin-top:12px;">
+              <li>مناسبة للمشاريع الكبيرة والاستثمارات الضخمة</li>
+              <li>مدة التسليم: 15-30 يوم عمل (حسب الحجم)</li>
+              <li>تشمل: دراسة سوق، تحليل منافسين، توقعات مالية، خطة تنفيذ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- لماذا تختار مشارف الجنان -->
+    <section id="whyUs" class="section alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>لماذا تختار جنان بيزنس؟</h2>
+          <p>نجمع بين الخبرة والاحترافية لنقدم لك أفضل خدمات دراسات الجدوى</p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>تحليل دقيق</h3>
+            <p>دراسات مبنية على بيانات حقيقية وتحليل عميق للسوق والمنافسين</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">👥</div>
+            <h3>فريق متخصص</h3>
+            <p>خبراء في الجدوى الاقتصادية والمالية بخبرة تتجاوز 10 سنوات</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⚡</div>
+            <h3>تسليم سريع</h3>
+            <p>نلتزم بالمواعيد المحددة مع ضمان جودة المخرجات</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">💡</div>
+            <h3>توصيات عملية</h3>
+            <p>نقدم لك توصيات قابلة للتطبيق تساعدك في اتخاذ القرار الصحيح</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>سرية تامة</h3>
+            <p>نحمي بياناتك ومعلومات مشروعك بأعلى معايير السرية</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📞</div>
+            <h3>دعم مستمر</h3>
+            <p>متابعة ما بعد تسليم الدراسة للإجابة على استفساراتك</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="requestForm" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>اطلب دراسة جدوى لمشروعك</h2>
+          <p>املأ النموذج أدناه وسنتواصل معك لتحديد نطاق العمل وتفاصيل الدراسة.</p>
+        </div>
+
+        <form id="feasibilityForm" class="contact-form" novalidate>
+          <div class="form-row">
+            <label style="font-weight:700;">نوع دراسة الجدوى المطلوبة *</label>
+            <div id="studyTypeBtns" style="display:flex; gap:12px; margin-top:6px;">
+              <label class="btn btn-outline radio-btn" style="cursor:pointer;">
+                <input type="radio" name="studyType" value="simple" /> دراسة مبسطة
+              </label>
+              <label class="btn btn-outline radio-btn" style="cursor:pointer;">
+                <input type="radio" name="studyType" value="detailed" /> دراسة مفصلة
+              </label>
+            </div>
+            <small class="error" data-for="studyType"></small>
+          </div>
+
+          <div class="form-row">
+            <label for="activity">نشاط المشروع / القطاع *</label>
+            <input id="activity" name="activity" type="text" required placeholder="مثال: مطعم، تجارة إلكترونية، مصنع..." />
+            <small class="error" data-for="activity"></small>
+          </div>
+
+          <div class="form-row">
+            <label for="city">المدينة / المنطقة *</label>
+            <input id="city" name="city" type="text" required placeholder="مثال: الرياض، جدة، الدمام..." />
+            <small class="error" data-for="city"></small>
+          </div>
+
+          <div class="form-row">
+            <label for="contactName">اسم المسؤول / مقدم الطلب *</label>
+            <input id="contactName" name="contactName" type="text" required placeholder="اسمك الكامل" />
+            <small class="error" data-for="contactName"></small>
+          </div>
+
+          <div class="form-row">
+            <label for="contactPhone">رقم الجوال *</label>
+            <input id="contactPhone" name="contactPhone" type="tel" required placeholder="05xxxxxxxx" />
+            <small class="error" data-for="contactPhone"></small>
+          </div>
+
+          <div class="form-row">
+            <label for="contactEmail">البريد الإلكتروني</label>
+            <input id="contactEmail" name="contactEmail" type="email" placeholder="example@domain.com" />
+            <small class="error" data-for="contactEmail"></small>
+          </div>
+
+          <div class="form-row full">
+            <label for="projectDescription">وصف مختصر للمشروع (اختياري)</label>
+            <textarea id="projectDescription" name="projectDescription" rows="4" placeholder="أخبرنا بتفاصيل إضافية عن مشروعك، الأهداف، حجم الاستثمار المتوقع..."></textarea>
+          </div>
+
+          <div class="form-row full">
+            <label for="files">رفع مستندات أو ملفات داعمة (اختياري)</label>
+            <input id="files" name="files" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,image/*" />
+            <small class="muted">يمكنك رفع عدة ملفات (PDF, Word, Excel, صور).</small>
+            <small class="error" data-for="files"></small>
+            <div id="fileList" class="muted" style="margin-top:6px;"></div>
+          </div>
+
+          <input type="hidden" name="_subject" value="طلب دراسة جدوى — نموذج دراسات الجدوى" />
+          <input type="hidden" name="form" value="feasibility" />
+          <input type="text" name="_gotcha" style="display:none" />
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="brand mini">
+          <img src="./assets/img/logo-light.png" alt="Jenan Biz" class="logo-img-footer" />
+        </div>
+        <p class="muted">© <span id="year"></span> جنان بيزنس - Jenan Biz. جميع الحقوق محفوظة.</p>
+      </div>
+      <div class="socials">
+        <a href="https://wa.me/966569202920" target="_blank" rel="noopener" aria-label="واتساب" title="واتساب">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </a>
+        <a href="https://x.com/jenanstar11" target="_blank" rel="noopener" aria-label="تويتر" title="تويتر / X">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/jenanstar11" target="_blank" rel="noopener" aria-label="إنستغرام" title="إنستغرام">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@jenan.star11" target="_blank" rel="noopener" aria-label="تيك توك" title="تيك توك">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <button id="toTop" class="to-top" aria-label="أعلى الصفحة">↑</button>
+
+  <script src="./js/main.js" defer></script>
+  <script type="module">
+    import { handleFormSubmit, validateForm } from './js/form-handler.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('feasibilityForm');
+      const fileInput = document.getElementById('files');
+      const fileListDiv = document.getElementById('fileList');
+      let selectedFiles = [];
+
+      // تحديث قائمة الملفات المعروضة
+      function updateFileList() {
+        if (!fileListDiv) return;
+        if (selectedFiles.length === 0) {
+          fileListDiv.innerHTML = '<span class="muted">لم يتم اختيار أي ملف بعد.</span>';
+          return;
+        }
+        fileListDiv.innerHTML = selectedFiles.map((file, idx) =>
+          `<div style="margin-bottom:4px;display:flex;align-items:center;gap:8px;">
+            <span>${file.name}</span>
+            <button type="button" class="btn btn-delete" style="padding:2px 8px;font-size:0.8em;" data-idx="${idx}">حذف</button>
+          </div>`
+        ).join('');
+        // إضافة حدث الحذف
+        fileListDiv.querySelectorAll('button[data-idx]').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const idx = parseInt(this.getAttribute('data-idx'));
+            selectedFiles.splice(idx, 1);
+            updateFileList();
+          });
+        });
+      }
+
+      // عند اختيار ملفات جديدة
+      if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+          const files = Array.from(e.target.files);
+          // إضافة الملفات الجديدة فقط (بدون تكرار)
+          files.forEach(f => {
+            if (!selectedFiles.some(sf => sf.name === f.name && sf.size === f.size)) {
+              selectedFiles.push(f);
+            }
+          });
+          updateFileList();
+          // إعادة تعيين input حتى يمكن اختيار نفس الملف مرة أخرى لاحقًا
+          fileInput.value = '';
+        });
+      }
+
+      // عند إرسال النموذج
+      if (form) {
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          if (!validateForm(form)) return;
+          // إنشاء كائن DataTransfer جديد لتمرير الملفات المختارة يدويًا
+          if (fileInput) {
+            const dt = new DataTransfer();
+            selectedFiles.forEach(f => dt.items.add(f));
+            fileInput.files = dt.files;
+          }
+          await handleFormSubmit(e, 'feasibility');
+          // إعادة تعيين القائمة بعد الإرسال
+          selectedFiles = [];
+          updateFileList();
+        });
+      }
+
+      // عرض القائمة عند التحميل
+      updateFileList();
+    });
+  </script>
+</body>
+</html>

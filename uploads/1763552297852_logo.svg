@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f4e5c3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b8941e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Star -->
+  <path d="M100,40 L104,60 L124,64 L108,80 L112,100 L100,88 L88,100 L92,80 L76,64 L96,60 Z" 
+        fill="url(#gold)" />
+  
+  <!-- Text: JENAN in stylized form -->
+  <text x="100" y="140" font-family="serif" font-size="48" font-weight="700" 
+        fill="url(#gold)" text-anchor="middle" letter-spacing="2">جِنان</text>
+</svg>

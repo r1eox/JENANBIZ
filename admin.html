@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة التحكم — جنان بيزنس</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="./assets/img/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #4a90e2;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --text: #2c3e50;
+      --muted: #6c757d;
+      --border: #dee2e6;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .admin-header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--primary);
+      padding: 20px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .admin-header .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .admin-title {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+    
+    .logout-btn {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      flex-wrap: nowrap;
+    }
+    
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+      bottom: -2px;
+      white-space: nowrap;
+    }
+    
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+    
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: var(--surface);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-right: 4px solid var(--primary);
+    }
+    
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .data-table {
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    
+    .table-header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .table-content {
+      padding: 20px;
+    }
+    
+    .inquiry-item {
+      background: var(--bg);
+      padding: 20px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border-right: 4px solid var(--primary);
+      transition: all 0.3s ease;
+    }
+    
+    .inquiry-item:hover {
+      transform: translateX(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .inquiry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    
+    .inquiry-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+    
+    .inquiry-service {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+    
+    .inquiry-details {
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    
+    .inquiry-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .inquiry-date {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-delete {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-delete:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--primary);
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--surface);
+      padding: 32px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    
+    .modal-text {
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .btn-cancel {
+      background: var(--muted);
+      color: white;
+    }
+    
+    .btn-cancel:hover {
+      background: #5a6268;
+    }
+    
+    .btn-confirm {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-confirm:hover {
+      background: #c0392b;
+    }
+    
+    @media (max-width: 768px) {
+      .admin-title {
+        font-size: 1.3rem;
+      }
+      
+      .tab-btn {
+        font-size: 1rem;
+        padding: 10px 16px;
+      }
+      
+      .inquiry-header {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .inquiry-footer {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="container">
+      <h1 class="admin-title">🎛️ لوحة التحكم</h1>
+      <button class="logout-btn" onclick="window.location.href='./index.html'">← العودة للموقع</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="all">الكل (<span id="allCount">0</span>)</button>
+      <button class="tab-btn" data-tab="contact">تواصل معنا (<span id="contactCount">0</span>)</button>
+      <button class="tab-btn" data-tab="feasibility">دراسات الجدوى (<span id="feasibilityCount">0</span>)</button>
+      <button class="tab-btn" data-tab="finance">استشارات إدارية (<span id="financeCount">0</span>)</button>
+      <button class="tab-btn" data-tab="marketing">تسويقية (<span id="marketingCount">0</span>)</button>
+      <button class="tab-btn" data-tab="tech-services">تقنية (<span id="techCount">0</span>)</button>
+      <button class="tab-btn" data-tab="business-services">للمستثمرين (<span id="businessCount">0</span>)</button>
+      <button class="tab-btn" data-tab="creative-services">إبداعية (<span id="creativeCount">0</span>)</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">إجمالي الطلبات</div>
+        <div class="stat-number" id="inquiriesCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">طلبات اليوم</div>
+        <div class="stat-number" id="todayCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">طلبات الأسبوع</div>
+        <div class="stat-number" id="weekCount">0</div>
+      </div>
+    </div>
+
+    <!-- Inquiries -->
+    <div class="data-table">
+      <div class="table-header">
+        طلبات العملاء
+        <a href="./reviews.html" class="btn" style="background:white; color:var(--primary); padding:8px 16px; font-size:0.9rem; margin-right:16px;">
+          📝 إدارة التقييمات
+        </a>
+      </div>
+      <div class="table-content" id="inquiries-list">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>جاري تحميل الطلبات...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h2 class="modal-title">تأكيد الحذف</h2>
+      <p class="modal-text">هل أنت متأكد من حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.</p>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+        <button class="btn btn-confirm" onclick="confirmDelete()">حذف</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBXhgIv3LbjcPwPYZ3u0tw7ZNSqox8pSmI",
+      authDomain: "jenan-star.firebaseapp.com",
+      projectId: "jenan-star",
+      storageBucket: "jenan-star.firebasestorage.app",
+      messagingSenderId: "506906396662",
+      appId: "1:506906396662:web:57b4ed3b38ab2c0086c68f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let deleteTarget = null;
+    let currentTab = 'all';
+    let allInquiries = [];
+
+    // Service Names
+    const serviceNames = {
+      'contact': 'تواصل معنا',
+      'feasibility': 'دراسات الجدوى',
+      'finance': 'استشارات إدارية',
+      'marketing': 'مجالات تسويقية',
+      'business-services': 'خدمات متكاملة للمستثمرين',
+      'creative-services': 'خدمات إبداعية',
+      'tech-services': 'خدمات تقنية'
+    };
+
+    // ترجمة أسماء الحقول الشائعة
+    const fieldLabels = {
+      contactPhone: 'رقم الجوال',
+      contactName: 'الاسم',
+      contactEmail: 'البريد الإلكتروني',
+      projectDescription: 'تفاصيل المشروع',
+      city: 'المدينة',
+      activity: 'النشاط',
+      studyType: 'نوع الدراسة',
+      subject_: 'الموضوع',
+      form: 'النموذج',
+      gotcha_: '',
+      service: 'الخدمة',
+      serviceName: 'الخدمة',
+      files: 'الملفات',
+      _subject: 'الموضوع',
+      name: 'الاسم',
+      phone: 'رقم الجوال',
+      email: 'البريد الإلكتروني',
+      companyName: 'اسم الشركة',
+      details: 'التفاصيل',
+      message: 'الرسالة',
+      location: 'الموقع',
+      deposits: 'الإيداعات',
+      ownership: 'الملكية',
+    };
+
+    // Tabs Handler
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.getAttribute('data-tab');
+        filterInquiries();
+      });
+    });
+
+    // Filter Inquiries
+    function filterInquiries() {
+      let filtered = currentTab === 'all' ? allInquiries : allInquiries.filter(inq => inq.service === currentTab);
+      
+      console.log(filtered);
+
+      if (filtered.length === 0) {
+        document.getElementById('inquiries-list').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات في هذا القسم</p></div>';
+        return;
+      }
+
+      let html = '';
+      filtered.forEach((inquiry) => {
+        const date = inquiry.createdAt?.seconds 
+          ? new Date(inquiry.createdAt.seconds * 1000).toLocaleDateString('ar-SA', { 
+              year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            })
+          : 'غير محدد';
+        const serviceName = inquiry.serviceName || serviceNames[inquiry.service] || inquiry.service || 'غير محدد';
+
+        // عرض جميع الحقول المدخلة (عدا الحقول التقنية)
+        let fieldsHtml = '';
+        Object.keys(inquiry).forEach(key => {
+          if (["createdAt","service","serviceName","files","id"].includes(key)) return;
+          if (Array.isArray(inquiry[key])) {
+            fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key].join(', ')}</div>`;
+          } else if (inquiry[key] && fieldLabels[key] !== '') {
+            fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key]}</div>`;
+          }
+        });
+
+        // عرض الملفات المرفقة
+        let filesHtml = '';
+        if (Array.isArray(inquiry.files) && inquiry.files.length > 0) {
+          filesHtml = '<div style="margin:10px 0 0 0; padding:10px; background:#f8f9fa; border-radius:8px;">' +
+            '<strong>📎 الملفات المرفقة:</strong><ul style="margin:8px 0 0 0; padding:0 0 0 18px;">' +
+            inquiry.files.map(f => `<li><a href="${f.url}" target="_blank" style="color:var(--primary);">${f.name}</a></li>`).join('') +
+            '</ul></div>';
+        }
+
+        html += `
+          <div class="inquiry-item">
+            <div class="inquiry-header">
+              <div>
+                <div class="inquiry-name">👤 ${inquiry.name || 'غير محدد'}</div>
+                <div class="inquiry-service" style="margin-top:8px;">
+                  <strong>📋 الخدمة:</strong> ${serviceName}
+                </div>
+              </div>
+            </div>
+            <div style="margin:12px 0; padding:12px; background:rgba(74,144,226,0.05); border-radius:8px;">
+              ${fieldsHtml}
+            </div>
+            ${filesHtml}
+            <div class="inquiry-footer">
+              <div class="inquiry-date">🕐 ${date}</div>
+              <button class="btn btn-delete" onclick="deleteInquiry('${inquiry.id}')">🗑️ حذف</button>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('inquiries-list').innerHTML = html;
+    }
+
+    // Load Inquiries
+    async function loadInquiries() {
+      const inquiriesList = document.getElementById('inquiries-list');
+      inquiriesList.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري تحميل الطلبات...</p></div>';
+
+      try {
+        const querySnapshot = await getDocs(collection(db, 'inquiries'));
+        
+        if (querySnapshot.empty) {
+          inquiriesList.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات بعد</p></div>';
+          document.getElementById('inquiriesCount').textContent = '0';
+          document.getElementById('todayCount').textContent = '0';
+          document.getElementById('weekCount').textContent = '0';
+          document.getElementById('allCount').textContent = '0';
+          document.getElementById('contactCount').textContent = '0';
+          document.getElementById('feasibilityCount').textContent = '0';
+          document.getElementById('financeCount').textContent = '0';
+          document.getElementById('marketingCount').textContent = '0';
+          document.getElementById('techCount').textContent = '0';
+          document.getElementById('businessCount').textContent = '0';
+          document.getElementById('creativeCount').textContent = '0';
+          return;
+        }
+
+        // حفظ جميع الطلبات
+        allInquiries = [];
+        querySnapshot.forEach((doc) => {
+          allInquiries.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // ترتيب حسب التاريخ (الأحدث أولاً)
+        allInquiries.sort((a, b) => {
+          const dateA = a.createdAt?.seconds || 0;
+          const dateB = b.createdAt?.seconds || 0;
+          return dateB - dateA;
+        });
+
+        // تحديث العدادات للأقسام
+        document.getElementById('allCount').textContent = allInquiries.length;
+        document.getElementById('contactCount').textContent = allInquiries.filter(i => i.service === 'contact').length;
+        document.getElementById('feasibilityCount').textContent = allInquiries.filter(i => i.service === 'feasibility').length;
+        document.getElementById('financeCount').textContent = allInquiries.filter(i => i.service === 'finance').length;
+        document.getElementById('marketingCount').textContent = allInquiries.filter(i => i.service === 'marketing').length;
+        document.getElementById('techCount').textContent = allInquiries.filter(i => i.service === 'tech-services').length;
+        document.getElementById('businessCount').textContent = allInquiries.filter(i => i.service === 'business-services').length;
+        document.getElementById('creativeCount').textContent = allInquiries.filter(i => i.service === 'creative-services').length;
+
+        // عرض الطلبات
+        filterInquiries();
+
+        // تحديث الإحصائيات العامة
+        document.getElementById('inquiriesCount').textContent = allInquiries.length;
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const todayCount = allInquiries.filter(inq => {
+          if (!inq.createdAt?.seconds) return false;
+          const inqDate = new Date(inq.createdAt.seconds * 1000);
+          inqDate.setHours(0, 0, 0, 0);
+          return inqDate.getTime() === today.getTime();
+        }).length;
+        
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        const weekCount = allInquiries.filter(inq => {
+          if (!inq.createdAt?.seconds) return false;
+          const inqDate = new Date(inq.createdAt.seconds * 1000);
+          return inqDate >= weekAgo;
+        }).length;
+        
+        document.getElementById('todayCount').textContent = todayCount;
+        document.getElementById('weekCount').textContent = weekCount;
+
+      } catch (error) {
+        console.error('Error loading inquiries:', error);
+        inquiriesList.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>حدث خطأ أثناء تحميل الطلبات</p><p style="color:var(--danger);font-size:0.9rem;margin-top:8px;">${error.message}</p></div>`;
+      }
+    }
+
+    // Delete Inquiry
+    window.deleteInquiry = function(inquiryId) {
+      deleteTarget = { type: 'inquiry', id: inquiryId };
+      document.getElementById('deleteModal').classList.add('active');
+    };
+
+    // Close Modal
+    window.closeDeleteModal = function() {
+      document.getElementById('deleteModal').classList.remove('active');
+      deleteTarget = null;
+    };
+
+    // Confirm Delete
+    window.confirmDelete = async function() {
+      if (!deleteTarget) return;
+
+      try {
+        await deleteDoc(doc(db, 'inquiries', deleteTarget.id));
+        closeDeleteModal();
+        loadInquiries();
+      } catch (error) {
+        console.error('Error deleting:', error);
+        alert('حدث خطأ أثناء الحذف');
+      }
+    };
+    loadInquiries();
+  </script>
+</body>
+</html>
+</html>
