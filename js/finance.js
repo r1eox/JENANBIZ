@@ -382,12 +382,22 @@ if (!window._fbApp) {
     };
     stepActions.appendChild(nextBtn);
 
-    // تلوين أزرار الراديو
+    // تلوين أزرار الراديو (لكل مجموعة name)
     if (s.type === 'radio') {
       const btns = stepContainer.querySelectorAll('label.btn');
       btns.forEach(lbl => {
         lbl.addEventListener('click', function(){
-          btns.forEach(l => l.classList.remove('btn-primary'));
+          const input = this.querySelector('input[type="radio"]');
+          if (!input) return;
+          // أزل التلوين عن كل الأزرار بنفس الاسم فقط
+          btns.forEach(l => {
+            const lInput = l.querySelector('input[type="radio"]');
+            if (lInput && lInput.name === input.name) {
+              l.classList.remove('btn-primary');
+              l.classList.add('btn-outline');
+            }
+          });
+          this.classList.remove('btn-outline');
           this.classList.add('btn-primary');
         });
       });
