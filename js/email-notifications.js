@@ -36,7 +36,7 @@ function sendEmailNotification(formData) {
     from_email: formData.email || 'غير محدد',
     phone: formData.phone || 'غير محدد',
     message: formData.message || 'غير محدد',
-    to_email: 'jen25ans@gmail.com', // بريدك
+    to_email: 'info@jenanbiz.sa', // بريدك
     reply_to: formData.email
   };
 

@@ -18,7 +18,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 // رقم الواتساب للإشعارات
-const WHATSAPP_NUMBER = '966569202920';
+const WHATSAPP_NUMBER = '966567711999';
 
 // معلومات EmailJS (سنحتاج تفعيلها لاحقاً)
 const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID'; // راح نضيفه لاحقاً

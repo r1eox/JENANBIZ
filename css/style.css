@@ -1,3 +1,130 @@
+/* نموذج متطلبات الأهلية المالية - ستايل تطبيق */
+.requirements-appform {
+  margin: 18px 0 24px 0;
+  padding: 0;
+  background: none;
+  border: none;
+  direction: rtl;
+}
+.appform-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 900px) {
+  .appform-grid { grid-template-columns: 1fr; }
+}
+.appform-card {
+  background: var(--surface);
+  border: 1.5px solid var(--primary);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px #4a90e211;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px 18px 14px 18px;
+  min-height: 110px;
+  transition: box-shadow 0.2s;
+}
+.appform-card:hover {
+  box-shadow: 0 4px 24px #4a90e233;
+}
+.appform-icon {
+  font-size: 2.1em;
+  margin-top: 2px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.appform-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.appform-label {
+  font-weight: 600;
+  color: #205080;
+  font-size: 1.04em;
+}
+.appform-note {
+  color: #4a90e2;
+  font-size: 0.95em;
+  font-weight: 400;
+}
+.appform-input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #b3d2f7;
+  font-size: 1em;
+  background: #f7faff;
+  margin-bottom: 2px;
+  transition: border 0.2s;
+}
+.appform-input:focus {
+  border: 1.5px solid #4a90e2;
+  outline: none;
+}
+.appform-fields {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .appform-fields { flex-direction: column; gap: 6px; }
+  .appform-card { padding: 12px 6px; }
+}
+/* متطلبات الأهلية المالية - حقول ملونة */
+.requirements-form {
+  margin: 18px 0 24px 0;
+  padding: 18px 16px 12px 16px;
+  background: #f7faff;
+  border-radius: 12px;
+  border: 1.5px solid #4a90e2;
+  box-shadow: 0 2px 8px #4a90e211;
+  direction: rtl;
+}
+.req-row {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.req-label {
+  font-weight: 600;
+  color: #205080;
+  margin-bottom: 6px;
+  font-size: 1.04em;
+}
+.req-note {
+  color: #4a90e2;
+  font-size: 0.95em;
+  font-weight: 400;
+}
+.req-input {
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1.5px solid #b3d2f7;
+  font-size: 1em;
+  background: #fff;
+  margin-bottom: 2px;
+  transition: border 0.2s;
+}
+.req-input:focus {
+  border: 1.5px solid #4a90e2;
+  outline: none;
+}
+.req-blue {
+  border-color: #4a90e2;
+  background: #eaf3fb;
+}
+.req-fields {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .requirements-form { padding: 10px 4px; }
+  .req-fields { flex-direction: column; gap: 6px; }
+}
 /* شعار M نصي */
 
 .jenan-logo-text {
@@ -111,9 +238,7 @@ body {
   margin: 0;
   font-family: "Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(1200px 800px at 80% -200px, rgba(212,175,55,0.15), transparent),
-              radial-gradient(1200px 800px at 0% -300px, rgba(184,148,30,0.12), transparent),
-              var(--bg);
+  background: var(--bg);
   line-height: 1.8;
 }
 
@@ -247,7 +372,7 @@ a { color: inherit; text-decoration: none; }
 /* About */
 .stats-grid { display: grid; gap: 16px; grid-template-columns: repeat(4, 1fr); margin-bottom: 36px; }
 .stat-card { 
-  background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(184,148,30,0.08)); 
+  /* background: none; */
   border: 1px solid var(--border); 
   padding: 24px; 
   border-radius: var(--radius); 
@@ -255,7 +380,25 @@ a { color: inherit; text-decoration: none; }
   transition: all 0.3s ease;
 }
 .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-.stat-number { font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.stat-number {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 8px #0002;
+}
+
+/* لون أزرق في الوضع الفاتح */
+[data-theme="light"] .stat-number {
+  color: var(--primary);
+  text-shadow: 0 1px 8px #4a90e233, 0 0 1px #fff;
+}
+
+/* زيادة وضوح الأرقام في الوضع الفاتح */
+[data-theme="light"] .stat-number {
+  color: var(--primary-600);
+  text-shadow: 0 1px 8px #4a90e233, 0 0 1px #fff;
+}
 .stat-label { color: var(--muted); font-size: 14px; }
 
 .about-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
@@ -1226,230 +1369,6 @@ body.admin-mode .delete-btn {
   .whatsapp-float svg {
     width: 28px;
     height: 28px;
-  }
-}
-
-/* قسم الإحصائيات */
-.stats-section {
-  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-  padding: 80px 0;
-  position: relative;
-  overflow: hidden;
-}
-
-[data-theme="light"] .stats-section {
-  background: linear-gradient(135deg, #4a90e2, #357abd);
-}
-
-.stats-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="2" height="2" fill="rgba(255,255,255,0.1)"/></svg>');
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
-  position: relative;
-  z-index: 1;
-}
-
-.stat-card {
-  text-align: center;
-  padding: 20px;
-  transition: transform 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-8px);
-}
-
-.stat-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-}
-
-.stat-number {
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  font-family: 'Cairo', sans-serif;
-}
-
-.stat-number::after {
-  content: '+';
-  margin-right: 4px;
-}
-
-.stat-label {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 768px) {
-  .stats-section {
-    padding: 60px 0;
-  }
-  
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
-  }
-  
-  .stat-icon {
-    font-size: 2.5rem;
-  }
-  
-  .stat-number {
-    font-size: 2.5rem;
-  }
-  
-  .stat-label {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
-
-/* قسم الأسئلة الشائعة (FAQ) */
-.faq-section {
-  background: var(--bg);
-}
-
-.faq-container {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.faq-item {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-  transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-  border-color: var(--primary-600);
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
-}
-
-.faq-question {
-  width: 100%;
-  padding: 20px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  text-align: right;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
-  transition: all 0.3s ease;
-}
-
-.faq-question:hover {
-  color: var(--primary-600);
-}
-
-.faq-question span {
-  flex: 1;
-}
-
-.faq-icon {
-  flex-shrink: 0;
-  margin-left: 16px;
-  transition: transform 0.3s ease;
-}
-
-.faq-item[data-open="true"] .faq-icon {
-  transform: rotate(180deg);
-}
-
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease, padding 0.4s ease;
-  padding: 0 24px;
-}
-
-.faq-item[data-open="true"] .faq-answer {
-  max-height: 500px;
-  padding: 0 24px 24px;
-}
-
-.faq-answer p {
-  color: var(--text-muted);
-  line-height: 1.8;
-  margin: 0;
-}
-
-.faq-cta {
-  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-  padding: 32px;
-  border-radius: var(--radius);
-  margin-top: 48px;
-}
-
-[data-theme="light"] .faq-cta {
-  background: linear-gradient(135deg, #4a90e2, #357abd);
-}
-
-.faq-cta p {
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 20px;
-}
-
-.faq-cta .btn {
-  background: white;
-  color: var(--primary-600);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.faq-cta .btn:hover {
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 768px) {
-  .faq-question {
-    padding: 16px 20px;
-    font-size: 1rem;
-  }
-  
-  .faq-answer {
-    padding: 0 20px;
-  }
-  
-  .faq-item[data-open="true"] .faq-answer {
-    padding: 0 20px 20px;
-  }
-  
-  .faq-cta {
-    padding: 24px 20px;
   }
 }
 

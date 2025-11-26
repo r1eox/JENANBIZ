@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <!-- Firebase سكريبتات متوافقة (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>لوحة التحكم — جنان بيزنس</title>
@@ -26,6 +29,12 @@
       --text: #2c3e50;
       --muted: #6c757d;
       --border: #dee2e6;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: var(--text);
     }
     
     body {
@@ -353,10 +362,30 @@
   </style>
 </head>
 <body>
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal active" style="z-index:2000;">
+    <div class="modal-content" style="max-width:350px;">
+      <h2 class="modal-title">تسجيل الدخول للوحة التحكم</h2>
+      <form id="loginForm" autocomplete="off" onsubmit="return false;">
+        <div style="margin-bottom:16px; text-align:right;">
+          <label for="username">اسم المستخدم</label>
+          <input id="username" name="username" type="text" style="width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #ccc;direction:ltr;" required autocomplete="username">
+        </div>
+        <div style="margin-bottom:20px; text-align:right;">
+          <label for="password">كلمة المرور</label>
+          <input id="password" name="password" type="password" style="width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #ccc;direction:ltr;" required autocomplete="current-password">
+        </div>
+        <div id="loginError" style="color:#e74c3c;min-height:22px;margin-bottom:12px;font-size:0.95rem;"></div>
+        <button type="submit" class="btn btn-confirm" style="width:100%;font-size:1.1rem;">دخول</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="admin-header">
     <div class="container">
       <h1 class="admin-title">🎛️ لوحة التحكم</h1>
+      <button class="logout-btn" id="logoutBtn" style="display:none;" onclick="logoutPanel()">تسجيل خروج</button>
       <button class="logout-btn" onclick="window.location.href='./index.html'">← العودة للموقع</button>
     </div>
   </header>
@@ -394,10 +423,26 @@
     <!-- Inquiries -->
     <div class="data-table">
       <div class="table-header">
-        طلبات العملاء
-        <a href="./reviews.html" class="btn" style="background:white; color:var(--primary); padding:8px 16px; font-size:0.9rem; margin-right:16px;">
-          📝 إدارة التقييمات
-        </a>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;">
+          <span>طلبات العملاء</span>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <label for="serviceFilter" style="font-size:0.95rem;">نوع الخدمة:</label>
+            <select id="serviceFilter" style="padding:6px 12px;border-radius:6px;">
+              <option value="all">الكل</option>
+              <option value="contact">تواصل معنا</option>
+              <option value="feasibility">دراسات الجدوى</option>
+              <option value="finance">استشارات إدارية</option>
+              <option value="marketing">تسويقية</option>
+              <option value="tech-services">تقنية</option>
+              <option value="business-services">للمستثمرين</option>
+              <option value="creative-services">إبداعية</option>
+            </select>
+            <button id="sortDateBtn" class="btn" style="background:var(--primary);color:#fff;">الأحدث أولاً</button>
+          </div>
+          <a href="./reviews.html" class="btn" style="background:white; color:var(--primary); padding:8px 16px; font-size:0.9rem;">
+            📝 إدارة التقييمات
+          </a>
+        </div>
       </div>
       <div class="table-content" id="inquiries-list">
         <div class="loading">
@@ -421,107 +466,244 @@
   </div>
 
   <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getFirestore, collection, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+  <script>
+    // --- نظام الصلاحيات وتسجيل الدخول ---
+    // بيانات الدخول:
+    // الأدمن: jenanbiz.sa / Jenan2030@
+    // العادي: 101 / 102938sa
+    const USERS = [
+      { username: 'jenanbiz.sa', password: 'Jenan2030@', role: 'admin' },
+      { username: '101', password: '102938sa', role: 'user' }
+    ];
 
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBXhgIv3LbjcPwPYZ3u0tw7ZNSqox8pSmI",
-      authDomain: "jenan-star.firebaseapp.com",
-      projectId: "jenan-star",
-      storageBucket: "jenan-star.firebasestorage.app",
-      messagingSenderId: "506906396662",
-      appId: "1:506906396662:web:57b4ed3b38ab2c0086c68f"
-    };
+    function showLoginModal() {
+      document.getElementById('loginModal').classList.add('active');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('loginError').textContent = '';
+      document.body.style.overflow = 'hidden';
+    }
+    function hideLoginModal() {
+      document.getElementById('loginModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    function loginPanel() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const user = USERS.find(u => u.username === username && u.password === password);
+      if (user) {
+        localStorage.setItem('panelRole', user.role);
+        hideLoginModal();
+        document.getElementById('logoutBtn').style.display = '';
+        showDeleteButtons();
+      } else {
+        document.getElementById('loginError').textContent = 'بيانات الدخول غير صحيحة';
+      }
+    }
+    function logoutPanel() {
+      localStorage.removeItem('panelRole');
+      showLoginModal();
+      document.getElementById('logoutBtn').style.display = 'none';
+      showDeleteButtons();
+    }
+    window.logoutPanel = logoutPanel;
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    window.addEventListener('DOMContentLoaded', () => {
+      const role = localStorage.getItem('panelRole');
+      if (!role) {
+        showLoginModal();
+        document.getElementById('logoutBtn').style.display = 'none';
+      } else {
+        hideLoginModal();
+        document.getElementById('logoutBtn').style.display = '';
+      }
+      showDeleteButtons();
 
+      // تفعيل زر تسجيل الدخول
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.onsubmit = function(e) {
+          e.preventDefault();
+          loginPanel();
+          return false;
+        };
+      }
+    });
+    function showDeleteButtons() {
+      const role = localStorage.getItem('panelRole');
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.style.display = (role === 'admin') ? '' : 'none';
+      });
+    }
+
+    // --- Firebase ---
+    if (!window._fbApp) {
+      window._fbApp = firebase.initializeApp({
+        apiKey: "AIzaSyBXhgIv3LbjcPwPYZ3u0tw7ZNSqox8pSmI",
+        authDomain: "jenan-star.firebaseapp.com",
+        projectId: "jenan-star",
+        storageBucket: "jenan-star.firebasestorage.app",
+        messagingSenderId: "506906396662",
+        appId: "1:506906396662:web:57b4ed3b38ab2c0086c68f"
+      });
+    }
+    var db = firebase.firestore();
+    // --- متغيرات رئيسية ---
     let deleteTarget = null;
     let currentTab = 'all';
+      let currentSortDesc = true;
     let allInquiries = [];
 
-    // Service Names
+    // متغير لمتابعة أحدث طلب
+
+    // أسماء الخدمات
     const serviceNames = {
       'contact': 'تواصل معنا',
       'feasibility': 'دراسات الجدوى',
       'finance': 'استشارات إدارية',
-      'marketing': 'مجالات تسويقية',
-      'business-services': 'خدمات متكاملة للمستثمرين',
-      'creative-services': 'خدمات إبداعية',
-      'tech-services': 'خدمات تقنية'
+      'marketing': 'تسويقية',
+      'tech-services': 'تقنية',
+      'business-services': 'للمستثمرين',
+      'creative-services': 'إبداعية'
     };
 
-    // ترجمة أسماء الحقول الشائعة
-    const fieldLabels = {
-      contactPhone: 'رقم الجوال',
-      contactName: 'الاسم',
-      contactEmail: 'البريد الإلكتروني',
-      projectDescription: 'تفاصيل المشروع',
-      city: 'المدينة',
-      activity: 'النشاط',
-      studyType: 'نوع الدراسة',
-      subject_: 'الموضوع',
-      form: 'النموذج',
-      gotcha_: '',
-      service: 'الخدمة',
-      serviceName: 'الخدمة',
-      files: 'الملفات',
-      _subject: 'الموضوع',
-      name: 'الاسم',
-      phone: 'رقم الجوال',
-      email: 'البريد الإلكتروني',
-      companyName: 'اسم الشركة',
-      details: 'التفاصيل',
-      message: 'الرسالة',
-      location: 'الموقع',
-      deposits: 'الإيداعات',
-      ownership: 'الملكية',
-    };
-
-    // Tabs Handler
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentTab = btn.getAttribute('data-tab');
+    // تحميل الطلبات من Firestore
+    async function loadInquiries() {
+      const inquiriesList = document.getElementById('inquiries-list');
+      inquiriesList.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري تحميل الطلبات...</p></div>';
+      try {
+        const snapshot = await db.collection('inquiries').get();
+        if (snapshot.empty) {
+          inquiriesList.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات بعد</p></div>';
+          document.getElementById('inquiriesCount').textContent = '0';
+          document.getElementById('todayCount').textContent = '0';
+          document.getElementById('weekCount').textContent = '0';
+          document.getElementById('allCount').textContent = '0';
+          document.getElementById('contactCount').textContent = '0';
+          document.getElementById('feasibilityCount').textContent = '0';
+          document.getElementById('financeCount').textContent = '0';
+          document.getElementById('marketingCount').textContent = '0';
+          document.getElementById('techCount').textContent = '0';
+          document.getElementById('businessCount').textContent = '0';
+          document.getElementById('creativeCount').textContent = '0';
+          return;
+        }
+        allInquiries = [];
+        snapshot.forEach(doc => {
+          allInquiries.push({ id: doc.id, ...doc.data() });
+        });
+        // دالة إظهار التنبيه
+        // ترتيب حسب التاريخ (الأحدث أولاً)
+        allInquiries.sort((a, b) => {
+          const dateA = a.createdAt?.seconds || 0;
+          const dateB = b.createdAt?.seconds || 0;
+          return dateB - dateA;
+        });
+        updateCounts();
         filterInquiries();
-      });
-    });
+      } catch (error) {
+        console.error('Firestore load error:', error);
+        inquiriesList.innerHTML = `<div class='empty-state'><div class='empty-icon'>⚠️</div><p>حدث خطأ أثناء تحميل الطلبات</p><p style='color:var(--danger);font-size:0.9rem;margin-top:8px;'>${error.message}</p></div>`;
+        // عرض رسالة الخطأ للمستخدم بشكل واضح
+        let errBox = document.createElement('div');
+        errBox.style = 'background:#fff0f0;color:#c0392b;padding:12px 18px;margin:18px 0;border-radius:8px;font-size:1.1em;direction:ltr;word-break:break-all;';
+        errBox.textContent = error.stack || error.message || error;
+        inquiriesList.appendChild(errBox);
+      }
+    }
 
-    // Filter Inquiries
+    function updateCounts() {
+      document.getElementById('allCount').textContent = allInquiries.length;
+      document.getElementById('contactCount').textContent = allInquiries.filter(i => i.service === 'contact').length;
+      document.getElementById('feasibilityCount').textContent = allInquiries.filter(i => i.service === 'feasibility').length;
+      document.getElementById('financeCount').textContent = allInquiries.filter(i => i.service === 'finance').length;
+      document.getElementById('marketingCount').textContent = allInquiries.filter(i => i.service === 'marketing').length;
+      document.getElementById('techCount').textContent = allInquiries.filter(i => i.service === 'tech-services').length;
+      document.getElementById('businessCount').textContent = allInquiries.filter(i => i.service === 'business-services').length;
+      document.getElementById('creativeCount').textContent = allInquiries.filter(i => i.service === 'creative-services').length;
+      // إحصائيات اليوم والأسبوع
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayCount = allInquiries.filter(inq => {
+        if (!inq.createdAt?.seconds) return false;
+        const inqDate = new Date(inq.createdAt.seconds * 1000);
+        inqDate.setHours(0, 0, 0, 0);
+        return inqDate.getTime() === today.getTime();
+      }).length;
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      const weekCount = allInquiries.filter(inq => {
+        if (!inq.createdAt?.seconds) return false;
+        const inqDate = new Date(inq.createdAt.seconds * 1000);
+        return inqDate >= weekAgo;
+      }).length;
+      document.getElementById('todayCount').textContent = todayCount;
+      document.getElementById('weekCount').textContent = weekCount;
+    }
+
     function filterInquiries() {
-      let filtered = currentTab === 'all' ? allInquiries : allInquiries.filter(inq => inq.service === currentTab);
-      
-      console.log(filtered);
-
+      // تصفية حسب نوع الخدمة من القائمة
+      let filterVal = document.getElementById('serviceFilter')?.value || currentTab;
+      let filtered = filterVal === 'all' ? allInquiries : allInquiries.filter(inq => inq.service === filterVal);
+      // فرز حسب التاريخ
+      filtered = filtered.slice().sort((a, b) => {
+        if (!a.createdAt?.seconds || !b.createdAt?.seconds) return 0;
+        return currentSortDesc ? b.createdAt.seconds - a.createdAt.seconds : a.createdAt.seconds - b.createdAt.seconds;
+      });
+      const inquiriesList = document.getElementById('inquiries-list');
       if (filtered.length === 0) {
-        document.getElementById('inquiries-list').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات في هذا القسم</p></div>';
+        inquiriesList.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات في هذا القسم</p></div>';
         return;
       }
-
       let html = '';
+      // تعريف العناوين العربية لكل حقل
+      const fieldLabels = {
+        fullName: 'الاسم الكامل',
+        mobile: 'رقم الجوال',
+        mainType: 'نوع النشاط',
+        entityAge: 'عمر المنشأة (بالسنوات)',
+        hq: 'مقر الشركة',
+        entityType: 'نوع الكيان',
+        ownership: 'ملكية الشركة',
+        hasStatements: 'هل توجد قوائم مالية آخر سنتين؟',
+        revenues: 'كم الإيرادات؟ (ريال)',
+        profit: 'كم الربح بعد الزكاة؟ (ريال)',
+        hasContracts: 'هل يوجد عقود للمنشأة مع الغير؟',
+        deposits: 'كم إجمالي الإيداعات آخر 12 شهر؟ (ريال)',
+        hasCommitments: 'هل يوجد التزامات على المنشأة؟',
+        commitmentAmount: 'كم مبلغ الالتزامات؟ (ريال)',
+        commitmentLeft: 'كم المتبقي من الالتزامات؟ (ريال)',
+        activityDesc: 'وصف النشاط الحالي',
+        studyType: 'نوع دراسة الجدوى',
+        activity: 'نشاط المشروع',
+        city: 'المدينة',
+        contactName: 'اسم مقدم الطلب',
+        contactPhone: 'رقم الجوال',
+        contactEmail: 'البريد الإلكتروني',
+        projectDescription: 'وصف المشروع'
+      };
       filtered.forEach((inquiry) => {
         const date = inquiry.createdAt?.seconds 
-          ? new Date(inquiry.createdAt.seconds * 1000).toLocaleDateString('ar-SA', { 
-              year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-            })
+          ? new Date(inquiry.createdAt.seconds * 1000).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
           : 'غير محدد';
         const serviceName = inquiry.serviceName || serviceNames[inquiry.service] || inquiry.service || 'غير محدد';
-
-        // عرض جميع الحقول المدخلة (عدا الحقول التقنية)
         let fieldsHtml = '';
-        Object.keys(inquiry).forEach(key => {
-          if (["createdAt","service","serviceName","files","id"].includes(key)) return;
-          if (Array.isArray(inquiry[key])) {
-            fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key].join(', ')}</div>`;
-          } else if (inquiry[key] && fieldLabels[key] !== '') {
-            fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key]}</div>`;
+        // ترتيب العرض حسب نوع الخدمة
+        let stepOrder = [
+          'fullName','mobile','mainType','entityAge','hq','entityType','ownership','hasStatements','revenues','profit','hasContracts','deposits','hasCommitments','commitmentAmount','commitmentLeft','activityDesc'
+        ];
+        if (inquiry.service === 'feasibility') {
+          stepOrder = ['studyType','activity','city','contactName','contactPhone','contactEmail','projectDescription'];
+        }
+        stepOrder.forEach(key => {
+          if (inquiry[key]) {
+            if (Array.isArray(inquiry[key])) {
+              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key].join(', ')}</div>`;
+            } else {
+              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key]}</div>`;
+            }
           }
         });
-
-        // عرض الملفات المرفقة
         let filesHtml = '';
         if (Array.isArray(inquiry.files) && inquiry.files.length > 0) {
           filesHtml = '<div style="margin:10px 0 0 0; padding:10px; background:#f8f9fa; border-radius:8px;">' +
@@ -529,7 +711,6 @@
             inquiry.files.map(f => `<li><a href="${f.url}" target="_blank" style="color:var(--primary);">${f.name}</a></li>`).join('') +
             '</ul></div>';
         }
-
         html += `
           <div class="inquiry-item">
             <div class="inquiry-header">
@@ -551,116 +732,58 @@
           </div>
         `;
       });
-
-      document.getElementById('inquiries-list').innerHTML = html;
+      inquiriesList.innerHTML = html;
+      showDeleteButtons();
     }
 
-    // Load Inquiries
-    async function loadInquiries() {
-      const inquiriesList = document.getElementById('inquiries-list');
-      inquiriesList.innerHTML = '<div class="loading"><div class="spinner"></div><p>جاري تحميل الطلبات...</p></div>';
-
-      try {
-        const querySnapshot = await getDocs(collection(db, 'inquiries'));
-        
-        if (querySnapshot.empty) {
-          inquiriesList.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات بعد</p></div>';
-          document.getElementById('inquiriesCount').textContent = '0';
-          document.getElementById('todayCount').textContent = '0';
-          document.getElementById('weekCount').textContent = '0';
-          document.getElementById('allCount').textContent = '0';
-          document.getElementById('contactCount').textContent = '0';
-          document.getElementById('feasibilityCount').textContent = '0';
-          document.getElementById('financeCount').textContent = '0';
-          document.getElementById('marketingCount').textContent = '0';
-          document.getElementById('techCount').textContent = '0';
-          document.getElementById('businessCount').textContent = '0';
-          document.getElementById('creativeCount').textContent = '0';
-          return;
-        }
-
-        // حفظ جميع الطلبات
-        allInquiries = [];
-        querySnapshot.forEach((doc) => {
-          allInquiries.push({ id: doc.id, ...doc.data() });
-        });
-        
-        // ترتيب حسب التاريخ (الأحدث أولاً)
-        allInquiries.sort((a, b) => {
-          const dateA = a.createdAt?.seconds || 0;
-          const dateB = b.createdAt?.seconds || 0;
-          return dateB - dateA;
-        });
-
-        // تحديث العدادات للأقسام
-        document.getElementById('allCount').textContent = allInquiries.length;
-        document.getElementById('contactCount').textContent = allInquiries.filter(i => i.service === 'contact').length;
-        document.getElementById('feasibilityCount').textContent = allInquiries.filter(i => i.service === 'feasibility').length;
-        document.getElementById('financeCount').textContent = allInquiries.filter(i => i.service === 'finance').length;
-        document.getElementById('marketingCount').textContent = allInquiries.filter(i => i.service === 'marketing').length;
-        document.getElementById('techCount').textContent = allInquiries.filter(i => i.service === 'tech-services').length;
-        document.getElementById('businessCount').textContent = allInquiries.filter(i => i.service === 'business-services').length;
-        document.getElementById('creativeCount').textContent = allInquiries.filter(i => i.service === 'creative-services').length;
-
-        // عرض الطلبات
-        filterInquiries();
-
-        // تحديث الإحصائيات العامة
-        document.getElementById('inquiriesCount').textContent = allInquiries.length;
-        
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const todayCount = allInquiries.filter(inq => {
-          if (!inq.createdAt?.seconds) return false;
-          const inqDate = new Date(inq.createdAt.seconds * 1000);
-          inqDate.setHours(0, 0, 0, 0);
-          return inqDate.getTime() === today.getTime();
-        }).length;
-        
-        const weekAgo = new Date();
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        const weekCount = allInquiries.filter(inq => {
-          if (!inq.createdAt?.seconds) return false;
-          const inqDate = new Date(inq.createdAt.seconds * 1000);
-          return inqDate >= weekAgo;
-        }).length;
-        
-        document.getElementById('todayCount').textContent = todayCount;
-        document.getElementById('weekCount').textContent = weekCount;
-
-      } catch (error) {
-        console.error('Error loading inquiries:', error);
-        inquiriesList.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>حدث خطأ أثناء تحميل الطلبات</p><p style="color:var(--danger);font-size:0.9rem;margin-top:8px;">${error.message}</p></div>`;
-      }
-    }
-
-    // Delete Inquiry
+    // حذف طلب
     window.deleteInquiry = function(inquiryId) {
       deleteTarget = { type: 'inquiry', id: inquiryId };
       document.getElementById('deleteModal').classList.add('active');
     };
-
-    // Close Modal
     window.closeDeleteModal = function() {
       document.getElementById('deleteModal').classList.remove('active');
       deleteTarget = null;
     };
-
-    // Confirm Delete
     window.confirmDelete = async function() {
       if (!deleteTarget) return;
-
       try {
-        await deleteDoc(doc(db, 'inquiries', deleteTarget.id));
+        await db.collection('inquiries').doc(deleteTarget.id).delete();
         closeDeleteModal();
         loadInquiries();
       } catch (error) {
-        console.error('Error deleting:', error);
         alert('حدث خطأ أثناء الحذف');
       }
     };
+
+    // التبديل بين التبويبات
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentTab = this.getAttribute('data-tab');
+        // تحديث الفلتر من القائمة أيضاً
+        const filterSel = document.getElementById('serviceFilter');
+        if (filterSel) filterSel.value = currentTab;
+        filterInquiries();
+      });
+    });
+
+    // تصفية من القائمة المنسدلة
+    document.getElementById('serviceFilter').addEventListener('change', function(){
+      currentTab = this.value;
+      filterInquiries();
+    });
+
+    // زر فرز التاريخ
+    document.getElementById('sortDateBtn').addEventListener('click', function(){
+      currentSortDesc = !currentSortDesc;
+      this.textContent = currentSortDesc ? 'الأحدث أولاً' : 'الأقدم أولاً';
+      filterInquiries();
+    });
+
+    // تحميل الطلبات عند بدء الصفحة
     loadInquiries();
   </script>
 </body>
-</html>
 </html>

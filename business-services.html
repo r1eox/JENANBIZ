@@ -118,6 +118,14 @@
       to { transform: translateY(0); opacity: 1; }
     }
   </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZQ52MCK5Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JZQ52MCK5Y');
+  </script>
 </head>
 <body>
   <header class="site-header" id="top" style="position:relative;">
@@ -185,6 +193,11 @@
         </div>
 
         <div class="cards">
+                    <div class="service-card" data-service="business-center-all">
+                      <div class="card-icon" style="font-size: 3rem;">🏢</div>
+                      <h3>جميع خدمات مركز الأعمال</h3>
+                      <p>تعديل كيان المنشأة، دخول شركاء/خروج شركاء، تحويل كيان المنشأة من مؤسسة إلى شركة، حجز اسم تجاري، شطب سجل المنشأة.</p>
+                    </div>
           <div class="service-card" data-service="entity">
             <div class="card-icon" style="font-size: 3rem;">🏢</div>
             <h3>تصحيح وتأسيس الكيان التجاري</h3>
@@ -193,8 +206,8 @@
 
           <div class="service-card" data-service="compliance">
             <div class="card-icon" style="font-size: 3rem;">✅</div>
-            <h3>مراجعة الامتثال مع وزارة الاستثمار</h3>
-            <p>التأكد من توافق مشروعك مع المتطلبات التنظيمية</p>
+            <h3>مراجعة الامتثال مع الجهات التنظيمية</h3>
+            <p>التأكد من توافق مشروعك مع متطلبات وزارة الاستثمار والجهات التنظيمية الأخرى.</p>
           </div>
 
           <div class="service-card" data-service="business-finance">
@@ -233,12 +246,22 @@
             <p>حلول للشركات الأجنبية للدخول للسوق</p>
           </div>
 
-          <div class="service-card" data-service="training" style="opacity: 0.6; cursor: not-allowed; position: relative;">
-            <div style="position: absolute; top: 12px; left: 12px; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">قريباً</div>
-            <div class="card-icon" style="font-size: 3rem;">🔒</div>
-            <h3>التدريب وتطوير الكوادر</h3>
-            <p>برامج تدريبية لرفع كفاءة فريقك</p>
+
+          <div class="service-card" data-service="investment-ministry">
+            <div class="card-icon" style="font-size: 3rem;">📑</div>
+            <h3>خدمات وزارة الاستثمار</h3>
+            <p>تعديل ترخيص الاستثمار، تصحيح أوضاع المستثمرين، تعبئة الاستبيانات الربعية، وتسجيل منشأة أو شركة جديدة عبر وزارة الاستثمار.</p>
           </div>
+            <div class="service-card" data-service="balady-services">
+              <div class="card-icon" style="font-size: 3rem;">🏬</div>
+              <h3>خدمات بلدي</h3>
+              <p>استخراج رخصة بلدي، استخراج ترخيص 24 ساعة، تعديل رخص بلدي، تصحيح أوضاع المنشأة ببلدي.</p>
+            </div>
+              <div class="service-card" data-service="labor-qiwa">
+                <div class="card-icon" style="font-size: 3rem;">💼</div>
+                <h3>مكتب العمل قوى</h3>
+                <p>تصحيح أوضاع المنشأة بقوى، تجهيز سياسات المنشأة بقوى، تجهيز عقود الموظفين واستخراج رخص العمل.</p>
+              </div>
         </div>
       </div>
     </section>
@@ -312,31 +335,40 @@
             <small class="muted" style="display:block; margin-bottom:8px;">اختر خدمة أو أكثر</small>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:8px;">
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="تصحيح الكيان التجاري" /> تصحيح الكيان التجاري
+                <input type="checkbox" name="services" value="جميع خدمات مركز الأعمال" /> جميع خدمات مركز الأعمال
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="مراجعة الامتثال" /> مراجعة الامتثال
+                <input type="checkbox" name="services" value="تصحيح وتأسيس الكيان التجاري" /> تصحيح وتأسيس الكيان التجاري
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="تمويل تطوير العمل" /> تمويل تطوير العمل
+                <input type="checkbox" name="services" value="مراجعة الامتثال مع الجهات التنظيمية" /> مراجعة الامتثال مع الجهات التنظيمية
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="تمويل شخصي" /> تمويل شخصي
+                <input type="checkbox" name="services" value="خدمات وزارة الاستثمار" /> خدمات وزارة الاستثمار
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="ترشيح شركات موثوقة" /> ترشيح شركات موثوقة
+                <input type="checkbox" name="services" value="خدمات بلدي" /> خدمات بلدي
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="الإقامة المميزة" /> الإقامة المميزة
+                <input type="checkbox" name="services" value="مكتب العمل قوى" /> مكتب العمل قوى
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="استشارات قانونية" /> استشارات قانونية
+                <input type="checkbox" name="services" value="الحصول على التمويل لتطوير العمل" /> الحصول على التمويل لتطوير العمل
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="checkbox" name="services" value="تمويل شخصي (عقار، سيارة، وغيرها)" /> تمويل شخصي (عقار، سيارة، وغيرها)
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="checkbox" name="services" value="الإرشاد لاختيار شركات وخدمات موثوقة" /> الإرشاد لاختيار شركات وخدمات موثوقة
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="checkbox" name="services" value="الحصول على الإقامة المميزة" /> الحصول على الإقامة المميزة
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="checkbox" name="services" value="استشارات قانونية ومالية متخصصة" /> استشارات قانونية ومالية متخصصة
               </label>
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
                 <input type="checkbox" name="services" value="دعم الشركات الأجنبية" /> دعم الشركات الأجنبية
-              </label>
-              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" name="services" value="التدريب وتطوير الكوادر" /> التدريب وتطوير الكوادر
               </label>
             </div>
             <small class="error" data-for="services"></small>
