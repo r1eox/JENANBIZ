@@ -658,8 +658,16 @@
       let html = '';
       // تعريف العناوين العربية لكل حقل
       const fieldLabels = {
+        // بيانات أساسية
         fullName: 'الاسم الكامل',
+        name: 'الاسم',
+        contactName: 'اسم مقدم الطلب',
         mobile: 'رقم الجوال',
+        contactPhone: 'رقم الجوال',
+        phone: 'رقم الجوال',
+        contactEmail: 'البريد الإلكتروني',
+        email: 'البريد الإلكتروني',
+        // بيانات المشروع/المنشأة
         mainType: 'نوع النشاط',
         entityAge: 'عمر المنشأة (بالسنوات)',
         hq: 'مقر الشركة',
@@ -677,30 +685,77 @@
         studyType: 'نوع دراسة الجدوى',
         activity: 'نشاط المشروع',
         city: 'المدينة',
-        contactName: 'اسم مقدم الطلب',
-        contactPhone: 'رقم الجوال',
-        contactEmail: 'البريد الإلكتروني',
-        projectDescription: 'وصف المشروع'
+        projectDescription: 'وصف المشروع',
+        details: 'تفاصيل إضافية',
+        services: 'الخدمات المطلوبة',
+        // شائعة في بعض النماذج
+        projectName: 'اسم المشروع',
+        projectDetails: 'تفاصيل المشروع',
+        budget: 'الميزانية المتوقعة',
+        businessName: 'اسم النشاط التجاري',
+        companyName: 'اسم الشركة',
+        additionalInfo: 'ملاحظات إضافية',
+        currentStatus: 'الوضع الحالي',
+        website: 'الموقع الإلكتروني',
+        // أي حقل آخر يضاف هنا
       };
       filtered.forEach((inquiry) => {
         const date = inquiry.createdAt?.seconds 
           ? new Date(inquiry.createdAt.seconds * 1000).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
           : 'غير محدد';
         const serviceName = inquiry.serviceName || serviceNames[inquiry.service] || inquiry.service || 'غير محدد';
-        let fieldsHtml = '';
+
+        // استخراج الاسم والجوال والبريد من جميع المفاتيح الممكنة
+        const nameVal = inquiry.name || inquiry.fullName || inquiry.contactName || 'غير محدد';
+        const phoneVal = inquiry.phone || inquiry.mobile || inquiry.contactPhone || 'غير محدد';
+        const emailVal = inquiry.email || inquiry.contactEmail || 'غير محدد';
+
+        // ترجمة القيم الافتراضية للحقول
+        const arabicValue = (val, key) => {
+          if (!val || val === 'غير محدد' || val === 'undefined' || val === 'null') return 'غير محدد';
+          // ترجمة بعض القيم الشائعة
+          if (typeof val === 'string') {
+            if (val.toLowerCase() === 'male') return 'ذكر';
+            if (val.toLowerCase() === 'female') return 'أنثى';
+            if (val === 'yes' || val === 'نعم') return 'نعم';
+            if (val === 'no' || val === 'لا') return 'لا';
+            if (val === 'undefined' || val === 'null') return 'غير محدد';
+          }
+          // ترجمة true/false
+          if (val === true) return 'نعم';
+          if (val === false) return 'لا';
+          return val;
+        };
+
         // ترتيب العرض حسب نوع الخدمة
         let stepOrder = [
-          'fullName','mobile','mainType','entityAge','hq','entityType','ownership','hasStatements','revenues','profit','hasContracts','deposits','hasCommitments','commitmentAmount','commitmentLeft','activityDesc'
+          'fullName','name','contactName','mobile','phone','contactPhone','contactEmail','email','mainType','entityAge','hq','entityType','ownership','hasStatements','revenues','profit','hasContracts','deposits','hasCommitments','commitmentAmount','commitmentLeft','activityDesc','studyType','activity','city','projectDescription','details','services'
         ];
         if (inquiry.service === 'feasibility') {
-          stepOrder = ['studyType','activity','city','contactName','contactPhone','contactEmail','projectDescription'];
+          stepOrder = ['studyType','activity','city','contactName','contactPhone','contactEmail','projectDescription','details','services'];
         }
+        let fieldsHtml = '';
+        // عرض الحقول حسب الترتيب
         stepOrder.forEach(key => {
           if (inquiry[key]) {
             if (Array.isArray(inquiry[key])) {
-              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key].join(', ')}</div>`;
+              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key].map(v => arabicValue(v, key)).join('، ')}</div>`;
             } else {
-              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key]}</div>`;
+              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${arabicValue(inquiry[key], key)}</div>`;
+            }
+          }
+        });
+        // عرض أي حقول إضافية غير مذكورة في stepOrder
+        // قائمة الحقول التقنية التي لا نريد عرضها
+        const hiddenFields = [
+          'id','createdAt','service','serviceName','files','form','subject_','gotcha_','clientName','_gotcha','_subject','_form','_template','_next','_captcha','_cc','_replyto','_autoresponse','_webhook','_redirect','_confirmation','_token','_action','_method','_language','_charset','_encoding','_submit','_id','_v','_type','_user','_date','_time','_ip','_browser','_os','_device','_referrer','_ga','_gid','_fbp','_fbc','_gcl','_utm','_gl','_gaid','_fbclid','_openstat','_ym_uid','_ym_counter','_ym_isad','_ym_debug','_ym_host','_ym_referrer','_ym_visor','_ym_cid','_ym_ab','_ym_uid','_ym_counter','_ym_isad','_ym_debug','_ym_host','_ym_referrer','_ym_visor','_ym_cid','_ym_ab'
+        ];
+        Object.keys(inquiry).forEach(key => {
+          if (!stepOrder.includes(key) && !hiddenFields.includes(key)) {
+            if (Array.isArray(inquiry[key])) {
+              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${inquiry[key].map(v => arabicValue(v, key)).join('، ')}</div>`;
+            } else {
+              fieldsHtml += `<div><strong>${fieldLabels[key] || key}:</strong> ${arabicValue(inquiry[key], key)}</div>`;
             }
           }
         });
@@ -715,9 +770,11 @@
           <div class="inquiry-item">
             <div class="inquiry-header">
               <div>
-                <div class="inquiry-name">👤 ${inquiry.name || 'غير محدد'}</div>
+                <div class="inquiry-name">👤 ${arabicValue(nameVal, 'name')}</div>
                 <div class="inquiry-service" style="margin-top:8px;">
-                  <strong>📋 الخدمة:</strong> ${serviceName}
+                  <strong>📋 الخدمة:</strong> ${arabicValue(serviceName, 'serviceName')}
+                  ${phoneVal && phoneVal !== 'غير محدد' ? `<br><strong>📞</strong> ${arabicValue(phoneVal, 'phone')}` : ''}
+                  ${emailVal && emailVal !== 'غير محدد' ? `<br><strong>📧</strong> ${arabicValue(emailVal, 'email')}` : ''}
                 </div>
               </div>
             </div>

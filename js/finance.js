@@ -16,7 +16,7 @@ if (!window._fbApp) {
 (function(){
   // --- تعريف الخطوات ---
   const steps = [
-    // تجاري: ترتيب صحيح بدون تكرار
+    // بيانات أساسية
     {
       name: 'fullName',
       label: 'الاسم الكامل',
@@ -40,7 +40,7 @@ if (!window._fbApp) {
         { value: 'مقاولات', label: 'مقاولات' }
       ]
     },
-    // التجاري فقط
+    // التجاري: حسب طلب المستخدم
     {
       name: 'entityAge',
       label: 'عمر المنشأة (بالسنوات)',
@@ -105,44 +105,117 @@ if (!window._fbApp) {
       required: true,
       showIf: data => data.mainType === 'تجاري' && data.hasCommitments === 'نعم'
     },
-    // بعد آخر سؤال تجاري مباشرة وصف النشاط
-    {
-      name: 'activityDesc',
-      label: 'وصف النشاط الحالي',
-      type: 'textarea',
-      required: true,
-      showIf: data => data.mainType === 'تجاري'
-    },
-    {
-      name: 'fullName',
-      label: 'الاسم الكامل',
-      type: 'text',
-      required: true
-    },
-    {
-      name: 'mobile',
-      label: 'رقم الجوال',
-      type: 'text',
-      required: true
-    },
-    {
-      name: 'mainType',
-      label: 'نوع النشاط',
-      type: 'radio',
-      required: true,
-      options: [
-        { value: 'تجاري', label: 'تجاري' },
-        { value: 'خدمات', label: 'خدمات' },
-        { value: 'مقاولات', label: 'مقاولات' }
-      ]
-    },
-    // مقاولات: ترتيب خاص
     {
       name: 'entityAge',
       label: 'عمر المنشأة (بالسنوات)',
       type: 'number',
       required: true,
-      showIf: data => data.mainType === 'مقاولات'
+      showIf: data => data.mainType === 'خدمات'
+    },
+    {
+      name: 'hq',
+      label: 'مقر الشركة',
+      type: 'text',
+      required: true,
+      showIf: data => data.mainType === 'خدمات'
+    },
+    {
+      name: 'entityType',
+      label: 'شركة أم مؤسسة؟',
+      type: 'radio',
+      required: true,
+      options: [
+        { value: 'شركة', label: 'شركة' },
+        { value: 'مؤسسة', label: 'مؤسسة' }
+      ],
+      showIf: data => data.mainType === 'خدمات'
+    },
+    {
+      name: 'ownership',
+      label: 'نوع الشركة',
+      type: 'radio',
+      required: true,
+      options: [
+        { value: 'سعودية', label: 'سعودية' },
+        { value: 'أجنبية', label: 'أجنبية' },
+        { value: 'مختلطة', label: 'مختلطة' }
+      ],
+      showIf: data => data.mainType === 'خدمات' && data.entityType === 'شركة'
+    },
+    {
+      name: 'hasStatements',
+      label: 'هل توجد قوائم مالية لآخر سنتين؟',
+      type: 'radio',
+      required: true,
+      options: [
+        { value: 'نعم', label: 'نعم' },
+        { value: 'لا', label: 'لا' }
+      ],
+      showIf: data => data.mainType === 'خدمات' && data.entityType === 'شركة'
+    },
+    {
+      name: 'revenues',
+      label: 'كم الإيرادات؟ (ريال)',
+      type: 'number',
+      required: true,
+      showIf: data => data.mainType === 'خدمات' && data.entityType === 'شركة' && data.hasStatements === 'نعم'
+    },
+    {
+      name: 'profit',
+      label: 'كم الربح بعد الزكاة؟ (ريال)',
+      type: 'number',
+      required: true,
+      showIf: data => data.mainType === 'خدمات' && data.entityType === 'شركة' && data.hasStatements === 'نعم'
+    },
+    {
+      name: 'hasContracts',
+      label: 'هل يوجد عقود للمنشأة مع الغير؟',
+      type: 'radio',
+      required: true,
+      options: [
+        { value: 'نعم', label: 'نعم' },
+        { value: 'لا', label: 'لا' }
+      ],
+      showIf: data => data.mainType === 'خدمات'
+    },
+    {
+      name: 'deposits',
+      label: 'كم إجمالي الإيداعات آخر 12 شهر؟ (ريال)',
+      type: 'number',
+      required: true,
+      showIf: data => data.mainType === 'خدمات'
+    },
+    {
+      name: 'hasCommitments',
+      label: 'هل توجد التزامات على المنشأة؟',
+      type: 'radio',
+      required: true,
+      options: [
+        { value: 'نعم', label: 'نعم' },
+        { value: 'لا', label: 'لا' }
+      ],
+      showIf: data => data.mainType === 'خدمات'
+    },
+    {
+      name: 'commitmentAmount',
+      label: 'كم مبلغ الالتزامات؟ (ريال)',
+      type: 'number',
+      required: true,
+      showIf: data => data.mainType === 'خدمات' && data.hasCommitments === 'نعم'
+    },
+    {
+      name: 'commitmentLeft',
+      label: 'كم المتبقي من الالتزامات؟ (ريال)',
+      type: 'number',
+      required: true,
+      showIf: data => data.mainType === 'خدمات' && data.hasCommitments === 'نعم'
+    },
+    {
+      name: 'activityDesc',
+      label: 'وصف للنشاط',
+      type: 'textarea',
+      required: true,
+      showIf: data => data.mainType === 'خدمات'
     },
     {
       name: 'hq',
@@ -358,8 +431,12 @@ if (!window._fbApp) {
     summaryStep.style.display = 'block';
     let html = `<div class="about-card" style="border-color:var(--primary);margin-bottom:18px;">
       <h3>ملخص البيانات المدخلة</h3><ul style="margin:0 0 12px 0;">`;
+    // عرض كل معلومة مرة واحدة فقط حسب أول ظهور في الخطوات
+    const shown = {};
     steps.forEach(s => {
       if (s.showIf && !s.showIf(formData)) return;
+      if (shown[s.label]) return; // لا تكرر نفس الحقل
+      shown[s.label] = true;
       html += `<li><strong>${s.label}:</strong> ${formData[s.name]||'-'}</li>`;
     });
     html += '</ul></div>';
