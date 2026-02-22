@@ -3,19 +3,21 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://yourwebsite.com/sitemap.xml
+Sitemap: https://jenanbiz.sa/sitemap.xml
 
 # Disallow admin pages
 Disallow: /admin-panel-x92kl3.html
 Disallow: /admin.html
 
-# Allow all other pages
+# Allow main pages
 Allow: /index.html
 Allow: /about.html
+Allow: /business-services.html
+Allow: /partners.html
+Allow: /blog.html
+Allow: /reviews.html
 Allow: /finance.html
 Allow: /feasibility.html
 Allow: /marketing.html
 Allow: /tech-services.html
-Allow: /business-services.html
 Allow: /creative-services.html
-Allow: /reviews.html

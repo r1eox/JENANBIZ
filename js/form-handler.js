@@ -58,12 +58,11 @@ export async function handleFormSubmit(event, formType) {
     });
     // إضافة اسم الخدمة بالعربي
     const serviceNames = {
+      'smart-contact': 'استشارة تمويلية',
+      'business-services': 'خدمات تأهيل تمويلي',
       'feasibility': 'دراسات الجدوى',
-      'finance': 'استشارات إدارية',
-      'marketing': 'مجالات تسويقية',
-      'business-services': 'خدمات متكاملة للمستثمرين',
-      'creative-services': 'خدمات إبداعية',
-      'tech-services': 'خدمات تقنية',
+      'finance': 'حلول مالية ومحاسبية',
+      'compliance': 'الامتثال الحكومي وتأسيس الشركات',
       'contact': 'تواصل معنا'
     };
     data.service = formType;
@@ -159,12 +158,11 @@ async function sendEmailNotification(data) {
  */
 function getServiceName(serviceKey) {
   const services = {
+    'smart-contact': 'استشارة تمويلية',
+    'business-services': 'خدمات تأهيل تمويلي',
     'feasibility': 'دراسات الجدوى',
-    'finance': 'استشارات إدارية',
-    'marketing': 'مجالات تسويقية',
-    'business-services': 'خدمات متكاملة للمستثمرين',
-    'creative-services': 'خدمات إبداعية',
-    'tech-services': 'خدمات تقنية'
+    'finance': 'حلول مالية ومحاسبية',
+    'compliance': 'الامتثال الحكومي وتأسيس الشركات'
   };
   return services[serviceKey] || serviceKey;
 }
